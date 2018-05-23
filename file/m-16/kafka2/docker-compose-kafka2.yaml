@@ -1,0 +1,88 @@
+# Copyright IBM Corp. All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+version: '2'
+
+services:
+#  kafka0:
+#    container_name: kafka0
+#    extends:
+#      file: base.yaml
+#      service: kafka
+#    environment:
+#      - KAFKA_BROKER_ID=0
+#      - KAFKA_MIN_INSYNC_REPLICAS=2
+#      - KAFKA_DEFAULT_REPLICATION_FACTOR=3
+#      - KAFKA_ZOOKEEPER_CONNECT=zookeeper0:2181,zookeeper1:2181,zookeeper2:2181
+#    depends_on:
+#      - zookeeper0
+#      - zookeeper1
+#      - zookeeper2
+#
+#  kafka1:
+#    container_name: kafka1
+#    extends:
+#      file: base.yaml
+#      service: kafka
+#    environment:
+#      - KAFKA_BROKER_ID=1
+#      - KAFKA_MIN_INSYNC_REPLICAS=2
+#      - KAFKA_DEFAULT_REPLICATION_FACTOR=3
+#      - KAFKA_ZOOKEEPER_CONNECT=zookeeper0:2181,zookeeper1:2181,zookeeper2:2181
+#    depends_on:
+#      - zookeeper0
+#      - zookeeper1
+#      - zookeeper2
+#
+  kafka2:
+    container_name: kafka2
+    extends:
+      file: base.yaml
+      service: kafka
+    environment:
+      - KAFKA_BROKER_ID=2
+      - KAFKA_MIN_INSYNC_REPLICAS=2
+      - KAFKA_DEFAULT_REPLICATION_FACTOR=3
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://192.168.1.108:9092
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper0:2181,zookeeper1:2181,zookeeper2:2181
+    ports:
+      - "9092:9092"
+#    depends_on:
+#      - zookeeper0
+#      - zookeeper1
+#      - zookeeper2
+#
+#  kafka3:
+#    container_name: kafka3
+#    extends:
+#      file: base.yaml
+#      service: kafka
+#    environment:
+#      - KAFKA_BROKER_ID=3
+#      - KAFKA_MIN_INSYNC_REPLICAS=2
+#      - KAFKA_DEFAULT_REPLICATION_FACTOR=3
+#      - KAFKA_ZOOKEEPER_CONNECT=zookeeper0:2181,zookeeper1:2181,zookeeper2:2181
+#    depends_on:
+#      - zookeeper0
+#      - zookeeper1
+#      - zookeeper2
+      
+    extra_hosts:
+      - "ca.org1.example.com: 192.168.1.101"
+      - "ca.org2.example.com: 192.168.1.102"
+      - "zookeeper0: 192.168.1.103"
+      - "zookeeper1: 192.168.1.104"
+      - "zookeeper2: 192.168.1.105"
+      - "kafka0: 192.168.1.106"
+      - "kafka1: 192.168.1.107"
+      - "kafka2: 192.168.1.108"
+      - "kafka3: 192.168.1.109"
+      - "orderer0.example.com: 192.168.1.110"
+      - "orderer1.example.com: 192.168.1.111"
+      - "orderer2.example.com: 192.168.1.112"
+      - "peer0.org1.example.com: 192.168.1.113"
+      - "peer1.org1.example.com: 192.168.1.114"
+      - "peer0.org2.example.com: 192.168.1.115"
+      - "peer1.org2.example.com: 192.168.1.116"

@@ -1,0 +1,58 @@
+# Copyright IBM Corp. All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+version: '2'
+
+services:
+
+#  zookeeper0:
+#    container_name: zookeeper0
+#    extends:
+#      file: base.yaml
+#      service: zookeeper
+#    environment:
+#      - ZOO_MY_ID=1
+#      - ZOO_SERVERS=server.1=zookeeper0:2888:3888 server.2=zookeeper1:2888:3888 server.3=zookeeper2:2888:3888
+#
+  zookeeper1:
+    container_name: zookeeper1
+    extends:
+      file: base.yaml
+      service: zookeeper
+    environment:
+      - ZOO_MY_ID=2
+      - ZOO_SERVERS=server.1=zookeeper0:2888:3888 server.2=zookeeper1:2888:3888 server.3=zookeeper2:2888:3888 quorumListenOnAllIPs:true
+      - quorumListenOnAllIPs=true
+    ports:
+      - "2181:2181"
+      - "2888:2888"
+      - "3888:3888"
+#
+#  zookeeper2:
+#    container_name: zookeeper2
+#    extends:
+#      file: base.yaml
+#      service: zookeeper
+#    environment:
+#      - ZOO_MY_ID=3
+#      - ZOO_SERVERS=server.1=zookeeper0:2888:3888 server.2=zookeeper1:2888:3888 server.3=zookeeper2:2888:3888
+
+    extra_hosts:
+#      - "ca.org1.example.com: 192.168.1.101"
+#      - "ca.org2.example.com: 192.168.1.102"
+      - "zookeeper0: 192.168.1.103"
+      - "zookeeper1: 192.168.1.104"
+      - "zookeeper2: 192.168.1.105"
+      - "kafka0: 192.168.1.106"
+      - "kafka1: 192.168.1.107"
+      - "kafka2: 192.168.1.108"
+      - "kafka3: 192.168.1.109"
+#      - "orderer0.example.com: 192.168.1.110"
+#      - "orderer1.example.com: 192.168.1.111"
+#      - "orderer2.example.com: 192.168.1.112"
+#      - "peer0.org1.example.com: 192.168.1.113"
+#      - "peer1.org1.example.com: 192.168.1.114"
+#      - "peer0.org2.example.com: 192.168.1.115"
+#      - "peer1.org2.example.com: 192.168.1.116" 
