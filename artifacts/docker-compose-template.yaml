@@ -13,9 +13,9 @@ services:
       service: ca
     environment:
       - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.org1.example.com-cert.pem
-      - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/CA1_PRIVATE_KEY
+      - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/8322d5ffc37df5dcbae2cfdf2c51b5f4441dc9b7876b26ccdc1c86e487db8823_sk
       - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.org1.example.com-cert.pem
-      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/CA1_PRIVATE_KEY
+      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/8322d5ffc37df5dcbae2cfdf2c51b5f4441dc9b7876b26ccdc1c86e487db8823_sk
     ports:
       - "7054:7054"
     volumes:
@@ -28,9 +28,9 @@ services:
       service: ca
     environment:
       - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.org2.example.com-cert.pem
-      - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/CA2_PRIVATE_KEY
+      - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/98ca904172dc373e68f769fb52190b6422aec416bf5790f8480adb164a1a8f89_sk
       - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.org2.example.com-cert.pem
-      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/CA2_PRIVATE_KEY
+      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/98ca904172dc373e68f769fb52190b6422aec416bf5790f8480adb164a1a8f89_sk
     ports:
       - "8054:7054"
     volumes:
@@ -44,6 +44,10 @@ services:
     environment:
       - ZOO_MY_ID=1
       - ZOO_SERVERS=server.1=zookeeper0:2888:3888 server.2=zookeeper1:2888:3888 server.3=zookeeper2:2888:3888
+    volumes:
+      - /var/hyperledger/z0/:/data/
+
+
 
   zookeeper1:
     container_name: zookeeper1
@@ -53,6 +57,8 @@ services:
     environment:
       - ZOO_MY_ID=2
       - ZOO_SERVERS=server.1=zookeeper0:2888:3888 server.2=zookeeper1:2888:3888 server.3=zookeeper2:2888:3888
+    volumes:
+      - /var/hyperledger/z1/:/data/
 
   zookeeper2:
     container_name: zookeeper2
@@ -62,6 +68,8 @@ services:
     environment:
       - ZOO_MY_ID=3
       - ZOO_SERVERS=server.1=zookeeper0:2888:3888 server.2=zookeeper1:2888:3888 server.3=zookeeper2:2888:3888
+    volumes:
+      - /var/hyperledger/z2/:/data/
 
   kafka0:
     container_name: kafka0
@@ -73,6 +81,8 @@ services:
       - KAFKA_MIN_INSYNC_REPLICAS=2
       - KAFKA_DEFAULT_REPLICATION_FACTOR=3
       - KAFKA_ZOOKEEPER_CONNECT=zookeeper0:2181,zookeeper1:2181,zookeeper2:2181
+    volumes:
+      - /var/hyperledger/kafka0:/tmp/kafka-logs/
     depends_on:
       - zookeeper0
       - zookeeper1
@@ -88,6 +98,8 @@ services:
       - KAFKA_MIN_INSYNC_REPLICAS=2
       - KAFKA_DEFAULT_REPLICATION_FACTOR=3
       - KAFKA_ZOOKEEPER_CONNECT=zookeeper0:2181,zookeeper1:2181,zookeeper2:2181
+    volumes:
+      - /var/hyperledger/kafka1:/tmp/kafka-logs/
     depends_on:
       - zookeeper0
       - zookeeper1
@@ -103,6 +115,8 @@ services:
       - KAFKA_MIN_INSYNC_REPLICAS=2
       - KAFKA_DEFAULT_REPLICATION_FACTOR=3
       - KAFKA_ZOOKEEPER_CONNECT=zookeeper0:2181,zookeeper1:2181,zookeeper2:2181
+    volumes:
+      - /var/hyperledger/kafka2:/tmp/kafka-logs/
     depends_on:
       - zookeeper0
       - zookeeper1
@@ -118,6 +132,8 @@ services:
       - KAFKA_MIN_INSYNC_REPLICAS=2
       - KAFKA_DEFAULT_REPLICATION_FACTOR=3
       - KAFKA_ZOOKEEPER_CONNECT=zookeeper0:2181,zookeeper1:2181,zookeeper2:2181
+    volumes:
+      - /var/hyperledger/kafka3:/tmp/kafka-logs/
     depends_on:
       - zookeeper0
       - zookeeper1
@@ -132,6 +148,7 @@ services:
     - ./channel/genesis.block:/var/hyperledger/orderer/genesis.block
     - ./crypto-config/ordererOrganizations/example.com/orderers/orderer0.example.com/msp:/var/hyperledger/orderer/msp
     - ./crypto-config/ordererOrganizations/example.com/orderers/orderer0.example.com/tls/:/var/hyperledger/orderer/tls
+    - /var/hyperledger/orderer0:/var/hyperledger/production
     ports:
       - 7050:7050
     depends_on:
@@ -149,6 +166,7 @@ services:
     - ./channel/genesis.block:/var/hyperledger/orderer/genesis.block
     - ./crypto-config/ordererOrganizations/example.com/orderers/orderer1.example.com/msp:/var/hyperledger/orderer/msp
     - ./crypto-config/ordererOrganizations/example.com/orderers/orderer1.example.com/tls/:/var/hyperledger/orderer/tls
+    - /var/hyperledger/orderer1:/var/hyperledger/production
     ports:
       - 8050:7050
     depends_on:
@@ -166,6 +184,7 @@ services:
     - ./channel/genesis.block:/var/hyperledger/orderer/genesis.block
     - ./crypto-config/ordererOrganizations/example.com/orderers/orderer2.example.com/msp:/var/hyperledger/orderer/msp
     - ./crypto-config/ordererOrganizations/example.com/orderers/orderer2.example.com/tls/:/var/hyperledger/orderer/tls
+    - /var/hyperledger/orderer2:/var/hyperledger/production
     ports:
       - 9050:7050
     depends_on:
@@ -188,6 +207,7 @@ services:
         - /var/run/:/host/var/run/
         - ./crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/msp:/etc/hyperledger/fabric/msp
         - ./crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls:/etc/hyperledger/fabric/tls
+        - /var/hyperledger/peer01:/var/hyperledger/production
     ports:
       - 7051:7051
       - 7053:7053
@@ -211,6 +231,7 @@ services:
         - /var/run/:/host/var/run/
         - ./crypto-config/peerOrganizations/org1.example.com/peers/peer1.org1.example.com/msp:/etc/hyperledger/fabric/msp
         - ./crypto-config/peerOrganizations/org1.example.com/peers/peer1.org1.example.com/tls:/etc/hyperledger/fabric/tls
+        - /var/hyperledger/peer11:/var/hyperledger/production
     ports:
       - 8051:7051
       - 8053:7053
@@ -233,6 +254,7 @@ services:
         - /var/run/:/host/var/run/
         - ./crypto-config/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/msp:/etc/hyperledger/fabric/msp
         - ./crypto-config/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls:/etc/hyperledger/fabric/tls
+        - /var/hyperledger/peer02:/var/hyperledger/production
     ports:
       - 9051:7051
       - 9053:7053
@@ -255,7 +277,8 @@ services:
     volumes:
         - /var/run/:/host/var/run/
         - ./crypto-config/peerOrganizations/org2.example.com/peers/peer1.org2.example.com/msp:/etc/hyperledger/fabric/msp
-        - ./crypto-config/peerOrganizations/org2.example.com/peers/peer1.org2.example.com/tls:/etc/hyperledger/fabric/tls
+        - ./crypto-config/peerOrganizations/org2.example.com/peers/peer1.org2.example.com/tls:/etc/hyperledger/fabric/tls 
+        - /var/hyperledger/peer12:/var/hyperledger/production
     ports:
       - 10051:7051
       - 10053:7053

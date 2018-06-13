@@ -9,12 +9,23 @@
 
 CHANNEL_NAME=$1
 TOTAL_CHANNELS=$2
-: ${CHANNEL_NAME:="mychannel"}
+: ${CHANNEL_NAME:="person"}
 : ${TOTAL_CHANNELS:="2"}
 echo "Using CHANNEL_NAME prefix as $CHANNEL_NAME"
 ROOT_DIR=$PWD
 export FABRIC_CFG_PATH=$ROOT_DIR/artifacts/config
 ARCH=$(uname -s)
+
+
+cd $ROOT_DIR/artifacts/crypto-config/peerOrganizations/org1.example.com/ca/
+CA1_PRIV_KEY=8322d5ffc37df5dcbae2cfdf2c51b5f4441dc9b7876b26ccdc1c86e487db8823_sk
+
+cd $ROOT_DIR/artifacts/crypto-config/peerOrganizations/org2.example.com/ca/
+CA2_PRIV_KEY=98ca904172dc373e68f769fb52190b6422aec416bf5790f8480adb164a1a8f89_sk
+
+cd $ROOT_DIR/artifacts/crypto-config
+rm -rf *
+cd $ROOT_DIR/artifacts
 
 function generateCerts() {
 	CRYPTOGEN=$ROOT_DIR/artifacts/bin/${ARCH}/cryptogen
@@ -38,11 +49,11 @@ function replacePrivateKey() {
 	cd crypto-config/peerOrganizations/org1.example.com/ca/
 	PRIV_KEY=$(ls *_sk)
 	cd $ROOT_DIR/artifacts
-	sed $OPTS "s/CA1_PRIVATE_KEY/${PRIV_KEY}/g" docker-compose.yaml
+	sed $OPTS "s/${CA1_PRIV_KEY}/${PRIV_KEY}/g" docker-compose.yaml
 	cd crypto-config/peerOrganizations/org2.example.com/ca/
 	PRIV_KEY=$(ls *_sk)
 	cd $ROOT_DIR/artifacts
-	sed $OPTS "s/CA2_PRIVATE_KEY/${PRIV_KEY}/g" docker-compose.yaml
+	sed $OPTS "s/${CA2_PRIV_KEY}/${PRIV_KEY}/g" docker-compose.yaml
 }
 
 ## Generate orderer genesis block , channel configuration transaction and anchor peer update transactions
@@ -67,7 +78,6 @@ function generateChannelArtifacts() {
 	done
 }
 
-cd artifacts
 generateCerts
 replacePrivateKey
 generateChannelArtifacts
